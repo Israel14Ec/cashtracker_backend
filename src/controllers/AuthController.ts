@@ -128,6 +128,7 @@ export class AuthController {
     static validateToken = async (req: Request, res: Response  ) => {
         try {
             const { token } = req.body
+            console.log(token)
 
             const tokenExists = await User.findOne({where: {token}})
             if(!tokenExists) {
@@ -136,10 +137,11 @@ export class AuthController {
                 return 
             }
 
-            res.json({msg: 'Token válido'})
-
+            res.json({msg: 'Token válido, asigna un nuevo password'})
+            
         } catch (error) {
-            res.status(500).json({error, msg: 'No se pudo validar el código'})
+            console.log("Mensaje de error: ",error)
+            res.status(500).json({error: error, msg: 'No se pudo validar el código'})
         }
     }
 

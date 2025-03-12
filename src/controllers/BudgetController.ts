@@ -9,7 +9,7 @@ export class BudgetController {
             const budget = new Budget(req.body)
             budget.userId = req.user.id
             await budget.save()
-            res.status(201).json({msg: 'Presupuesto creado correctamente'})
+            res.status(201).json({msg: 'Presupuesto creado correctamente', data: budget})
         } catch (error) {
             res.status(500).json({error, msg: 'No se pudo guardar'})
         }
