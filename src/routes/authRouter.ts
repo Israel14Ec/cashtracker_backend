@@ -77,6 +77,16 @@ authRouter.post('/update-password',
     handleInputErrors,
     AuthController.updateCurrentUserPassword
 )
+authRouter.put('/user', 
+    authenticate,
+    body("name")
+        .notEmpty().withMessage('Ingrese un nombre'),
+    body("email")
+        .notEmpty().withMessage('Ingrese un email')
+        .isEmail().withMessage('Email no válido'),
+        handleInputErrors,
+    AuthController.updateUser
+)
 
 authRouter.post('/check-password', 
     authenticate,

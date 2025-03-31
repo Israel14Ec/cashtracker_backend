@@ -11,7 +11,7 @@ export class ExpensesController {
 
             // Validar que el nuevo gasto no supere el monto restante del presupuesto
             const total = (totalExpenses || 0) + req.body.amount;
-
+       
             //Validar que el expense no supere el presupuesto
             if(total > req.budget.amount ) {
                 res.status(400).json({ msg: 'El gasto es mayor al presupuesto restante'})

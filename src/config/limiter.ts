@@ -10,6 +10,6 @@ import { rateLimit } from "express-rate-limit"
 
 export const limiter = rateLimit({
     windowMs: 60 * 1000, //Cantidad de tiempo para limitar los request
-    limit: 5, //Cantidad de peticiones por el tiempo definido
+    limit: 10, //Cantidad de peticiones por el tiempo definido
     message: {"msg": "Has alcanzado el límite de peticiones, espera unos minutos"}
 })

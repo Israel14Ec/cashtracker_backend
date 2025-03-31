@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { BudgetController } from "../controllers/BudgetController";
-import { handleInputErrors } from "../middleware/validation";
-import { hasAcces, validateBudgetExists, validateBudgetId, validateBudgetInput } from "../middleware/budget";
 import { ExpensesController } from "../controllers/ExpenseController";
-import { validateExpenseExists, validateExpenseId, validateExpenseInput } from "../middleware/expense";
 import { authenticate } from "../middleware/auth";
+import { hasAcces, validateBudgetExists, validateBudgetId, validateBudgetInput } from "../middleware/budget";
+import { belongsToBudget, validateExpenseExists, validateExpenseId, validateExpenseInput } from "../middleware/expense";
+import { handleInputErrors } from "../middleware/validation";
 
 //USA PATRON ROA (Arquitectura Orientada a Recursos), estilo arquitectonico basado en REST para exponer recursos
 
@@ -20,6 +20,7 @@ budgetRouter.param('budgetId', hasAcces)
 
 budgetRouter.param('expenseId', validateExpenseId)
 budgetRouter.param('expenseId', validateExpenseExists)
+budgetRouter.param('expenseId', belongsToBudget)
 
 //Endpoints
 budgetRouter.post('/', 

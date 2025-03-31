@@ -5,6 +5,7 @@ import { checkPassword, hashPassword } from "../utils/auth"
 import { generateToken } from "../utils/token"
 import { AuthEmail } from "../emails/AuthEmail"
 import { generateJWT } from "../utils/jwt"
+import { Op } from "sequelize"
 
 export class AuthController {
 
@@ -94,6 +95,39 @@ export class AuthController {
             
         } catch (error) {
             res.status(500).json({error, msg: 'Hubo un error'})
+        }
+    }
+
+    //Actualizar usuario
+    static updateUser = async (req: Request, res: Response) => {
+        try {
+            const { name, email } = req.body
+
+            //Validar que el email no pertenezca a otro usuario
+            const userExists = await User.findOne({where: {
+                email,
+                id: {[Op.not] : req.user.id}
+            }}) 
+
+            if(userExists) {
+                const error = new Error('El correo ya fue registrado')
+                res.status(409).json({msg: error.message})
+                return
+            }
+
+            req.user.name = name
+            req.user.email = email
+            const userUpdate =  await req.user.save()
+            
+            res.json({
+                data: userUpdate,
+                msg: "Perfil actualizado correctamente"
+            })
+        } catch (error) {
+            res.json({
+                error,
+                msg: "No se pudo actualizar el perfil"
+            })
         }
     }
 
@@ -188,7 +222,7 @@ export class AuthController {
             user.password = await hashPassword(password)
             await user.save()
 
-            res.json("El password se modificó correctamente")
+            res.json({msg: "El password se modificó correctamente"})
 
         } catch (error) {
             res.status(500).json({error, msg: 'Hubo un error'})
